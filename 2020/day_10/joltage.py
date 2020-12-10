@@ -30,7 +30,6 @@ def combinations (joltageList):
                 break
         tree[node] = childNodes
         idx += 1
-    print(tree)
     return tree
 
 def DFS(tree,seed):
@@ -40,7 +39,11 @@ def DFS(tree,seed):
         return int(1)
     else:
         for node in childNodes:
-            combinations += DFS(tree,node)
+            if node in computed:
+                combinations += computed[node]
+            else:
+                computed[node] = DFS(tree,node)
+                combinations += computed[node]
     return combinations
 
 # Explanation: For each index, we need to figure out all the possible ways 
@@ -70,13 +73,14 @@ joltageList.append(chargingOutlet)
 joltageList.sort()
 
 # Part 1 - Joltage steps:
-# result = joltage(joltageList)
-# print(result[1]*result[3])
+result = joltage(joltageList)
+print(result[1]*result[3])
 
-# Part 2 - DFS + tree (VERY slow):
-# dic = combinations(joltageList)
-# result = DFS(dic,chargingOutlet)
-# print(result)
+# Part 2 - Tree + DFS + dynamic programming:
+computed = {}
+tree = combinations(joltageList)
+result = DFS(tree,chargingOutlet)
+print(result)
 
 # Better option: dynamic programming:
 result = dypro(0)
